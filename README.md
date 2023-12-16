@@ -10,6 +10,7 @@ This is a very basic container with some tools useful for debugging kubernetes n
 - curl
 - tcpdump
 - cloudflared
+- minio mc
 
 ## Docker
 
