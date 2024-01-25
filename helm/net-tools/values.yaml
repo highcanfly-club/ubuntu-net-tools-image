@@ -1,0 +1,135 @@
+# Default values for net-tools.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+
+image:
+  repository: highcanfly/net-tools
+  pullPolicy: IfNotPresent
+  # Overrides the image tag whose default is the chart appVersion.
+  tag: latest
+
+imagePullSecrets: []
+nameOverride: ""
+fullnameOverride: ""
+
+podAnnotations: {}
+podLabels: {}
+
+podSecurityContext: {}
+  # fsGroup: 2000
+
+securityContext: {}
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # readOnlyRootFilesystem: true
+  # runAsNonRoot: true
+  # runAsUser: 1000
+
+resources: 
+  limits:
+    cpu: 400m
+    memory: 256Mi
+  requests: 
+    cpu: 10m
+    memory: 32Mi
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 100
+  targetCPUUtilizationPercentage: 80
+  # targetMemoryUtilizationPercentage: 80
+
+# Additional volumes on the output Deployment definition.
+extraVolumes: []
+# - name: foo
+#   secret:
+#     secretName: mysecret
+#     optional: false
+
+# Additional volumeMounts on the output Deployment definition.
+extraVolumeMounts: []
+# - name: foo
+#   mountPath: "/etc/foo"
+#   readOnly: true
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+
+config: |
+  # Name of the tunnel you want to run
+  tunnel: s3-tunnel
+  credentials-file: /etc/cloudflared/creds/credentials.json
+  metrics: 0.0.0.0:2000
+  no-autoupdate: true
+  ingress:
+    - hostname: s3.chart-example.local
+      service: http://minio:9000
+    - hostname: s3-console.chart-example.local
+      service: http://minio-console:9001
+    # This rule matches any traffic which didn't match a previous rule, and responds with HTTP 404.
+    - service: http_status:404
+credentials: {"AccountTag": "none", "TunnelSecret": "none=", "TunnelID": ""}
+cert: |
+  -----BEGIN RSA PRIVATE KEY-----
+  MIIEowIBAAKCAQEAxzn6+pxqk8DsbmXQqEenyiqvgpx9giy5et3hXbolI1ubgSWM
+  zX3swowfkFZkR3+Yh82+kDTXSiNYryAL9nxIc69QL8wwfp240y8bNEmcqnL+zaJO
+  tCgaIVTE/YnUMgwdELSMFZlbj0r/KxQ9exE1cRF3UcW5N5K1rBv10C4vghGeE8IY
+  LAfZCspctHr7K4uWyZwLhKMFFcvxjZf1bDMDYts7N5LIiLLqEnl8tvVp0Zmtz9Hx
+  Q4ULqBxBeZ95GES3XQ32w/g0ukyZu4XvzZQvw+uBftPdTJBYq2F1LNaxaX4LdWqx
+  8LtPpBoZBPZot1wqADoEkf/xfSvhjDD2qc/f3QIDAQABAoIBAHI2YBa6AzNvX1uu
+  zN8cLSnuLK4BDsbI4xB4ERINe+r4Qn7YSw8nSMsDT7kMffKrSINaRQwg7udWuimz
+  gogtGdAQSjUMpyR/QQz4rWzdYo4o3MCAcwQ/FTPUiBYdpOOIJEWGa+SaBW5xfTVy
+  JgjehberXq8nXhZo6fOgF9zgDWZPtOnUySj5/ssri699POHlB3SRCWulp3LTRUFk
+  Hok4p+R3trUR7fw5/x3xOU7KQ6witRd1Iqlflog8guuCSpsivlZRWq/DEa22sCL8
+  gEeJZXY9L9jPuw106kxcbv9KIhAe7tQ4TnidFuvYU78JjRwkBXAWIAj8lDliJSmy
+  c6HIc3UCgYEA+qoqW3pNy6zR2GjSq3cAPUZrY1o9GEqut60yYuBmKiNsoYNxk12l
+  ogPDUaOgp4raWrfOV/frLjwhcNWacVgq+bNlcLy302yPKZOfndidImDTE2iDQe9u
+  H9CxXLDqGRWnfpkXG7Ixy2omO/hWu2bQOS+FUagfWdFxtuo7IcA0MZMCgYEAy3eJ
+  JhyURX2uAl0UrogSTPwVVzFm9cONhDJUancXg1pEb4Vlhao5YLlFfn8RA2ZMoH2A
+  6PObOnOK8E+aOwOmXDK9X6cD+RorwQYbGsWeT1ARJUE811EdSmQYmk1E+xWg4OhM
+  IL+NUKBM7BP3ih3n5TQwl78P7t3oeBszQyobTs8CgYEAui7Gg2fWfOAChcFmKSGc
+  teamQQd3taFTIO6uLC8M82OYfmcJZzH5ots0qmDlJUzHXvaDd2eX8aGMHSkrK+EX
+  Gp0bTZ9+0rUhqPoTZsTMAgr0/Md2JvVWUJ9L/dMSLkudOzUuqs2ymqpfd8+/bDaz
+  lqYrWjmL/8THt9tGzIzct60CgYB59ikrwy3NicxodksTY1U0+FYCcgZ5gsKtX03i
+  k4hwoActohR8ztCd/fB+JsSX+RYtjY1cFcoSe3fpHI4imcl6sp95Wq+y/dEEXxiY
+  L6T5fdEJN9W0a1bXZLCqrW6P4yMQLa6UYr3eenghesaC7/I1HdeS3mA6mqHifMt5
+  kx/TWQKBgATqmIf+js/AEFjsVhdZfzWJIGpRqwuCNnUPoe2WodayTKko9eTZonlk
+  N//rOE4KMt/RWy4i3Xddu1hmpA8/y2V4Mg3Llr9q4NO72EjpVNpf4XBU1Corgn1X
+  0fIhZb2aYYSsXJvyjGu6s/GHE1THp1e9bZ/76R7LsZmhqW5OM5xy
+  -----END RSA PRIVATE KEY-----
+  -----BEGIN CERTIFICATE-----
+  MIICxzCCAnGgAwIBAgIUOp5ZxkMH+gAThWwfRQfk5vECEvEwDQYJKoZIhvcNAQEL
+  BQAwgbcxCzAJBgNVBAYTAlVTMRMwEQYDVQQIDApDYWxpZm9ybmlhMRYwFAYDVQQH
+  DA1TYW4gRnJhbmNpc2NvMRkwFwYDVQQKDBBDbG91ZEZsYXJlLCBJbmMuMTgwNgYD
+  BgNVBAgMCkNhbGlmb3JuaWExFjAUBgNVBAcMDVNhbiBGcmFuY2lzY28xGTAXBgNV
+  BAoMEENsb3VkRmxhcmUsIEluYy4xODA2BgNVBAsML0Nsb3VkRmxhcmUgT3JpZ2lu
+  IFNTTCBFQ0MgQ2VydGlmaWNhdGUgQXV0aG9yaXR5MSYwJAYDVQQDDB1DbG91ZEZs
+  YXJlIE9yaWdpbiBDZXJ0aWZpY2F0ZTBcMA0GCSqGSIb3DQEBAQUAA0sAMEgCQQDq
+  VQQLDC9DbG91ZEZsYXJlIE9yaWdpbiBTU0wgRUNDIENlcnRpZmljYXRlIEF1dGhv
+  cml0eTEmMCQGA1UEAwwdQ2xvdWRGbGFyZSBPcmlnaW4gQ2VydGlmaWNhdGUwHhcN
+  MjMxMTE4MDcyMzIxWhcNMjQxMTE3MDcyMzIxWjCBtzELMAkGA1UEBhMCVVMxEzAR
+  r50YzHbxLDfRKbfT006808gy66NloDXK9DQQcB31p03uw2t6jQ/DBuw5yh8qZOeX
+  T6OvSSCj3r/tpawIr9SRAgMBAAGjUzBRMB0GA1UdDgQWBBTSCk/pNTwU1wN4ocDq
+  lz7yno+2yTAfBgNVHSMEGDAWgBTSCk/pNTwU1wN4ocDqlz7yno+2yTAPBgNVHRMB
+  Af8EBTADAQH/MA0GCSqGSIb3DQEBCwUAA0EAOyeDz+gMO9AfNPuQYDyojYWs58jL
+  qJUUzvY9YPiJwFcJcqgZ7up1gwA/xcGi7SsdRHLMVPDikRqtfdDO/HNjYA==
+  -----END CERTIFICATE-----
+  -----BEGIN ARGO TUNNEL TOKEN-----
+  eWFlNGthcGFpMXJlaTZhaFdpMldlZXk3dWhvbzlhaXF1YWk3WG91RjdFZXF1b2FmYWlGb2hQaDZh
+  QQLDC9DbG91ZEZsYXJlIE9yaWdpbiBTU0wgRUNDIENlcnRpZmljYXRlaWgyYWVjM2hp1vNW9oY2h
+  ZTVlZW5lZTNlZW1vNW9oY2hhaWNoYWk3QmVlcjFvb0RpZVBoZWUzY2h1MXNvb3BoOW9vVmlpMWVl
+  RGFlOG5ldVBhaDVQZWk5d2VlOGFpbmVpN2hpZW1vaGhvc2hlaTdhZWJvaGJhaHNvaHphU2hlaW4y
+  YWlnaGFoMG9zaHVhOHdhZUY5b29aNFB1OXRob29jb29rM2VlbmdvaDVzaG9oejZlVGFoQmVlNGll
+  R2hpZWs4aWV0aGVlY2hvaE01b3VmaWVLNmpvaG5nYWk1b2hoZWlOYTVlaVJpcXVpWmF2NWVlbmdl
+  ZTdzb2ljOUFpc2FpbmFoYmVpcnVvdjd3ZWlnaDRBZVY0b2h4b3VzaDR1ZGkzTmV5ZWUwYmVlc2gx
+  aUNvaHNoZWVtYWk0YWl5YWVzNkVpZDNhaGNoZWViZWV0aGVlMUFpRmllOWhlaWpvaHBlZWZvb2No
+  aTBhZWphdmFocDBlZUJvYWxhZTFTaGFoYzF6ZWl0aDhqYWhsb2h0aTBvb3RoaWVrZWkwZWl4NkwK
+  -----END ARGO TUNNEL TOKEN-----
