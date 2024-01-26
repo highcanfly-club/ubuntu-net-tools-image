@@ -1,6 +1,6 @@
 apiVersion: v2
-name: net-tools
-description: A Helm chart for deploying Highcanfly's net-tools container.
+name: cloudflared
+description: A Helm chart for deploying Highcanfly's cloudflared in net-tools container.
 
 # A chart can be either an 'application' or a 'library' chart.
 #
