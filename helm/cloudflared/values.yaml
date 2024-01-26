@@ -62,6 +62,7 @@ tolerations: []
 
 affinity: {}
 
+TunnelID: "d2b4f433-41f9-4b8d-936c-807f3ad91ffc"
 
 config: |
   # Name of the tunnel you want to run
@@ -133,3 +134,6 @@ cert: |
   aUNvaHNoZWVtYWk0YWl5YWVzNkVpZDNhaGNoZWViZWV0aGVlMUFpRmllOWhlaWpvaHBlZWZvb2No
   aTBhZWphdmFocDBlZUJvYWxhZTFTaGFoYzF6ZWl0aDhqYWhsb2h0aTBvb3RoaWVrZWkwZWl4NkwK
   -----END ARGO TUNNEL TOKEN-----
+
+# command: ["/usr/bin/sleep"]
+# args: ["infinity"]
