@@ -36,22 +36,16 @@ spec:
           {{- if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
           {{- else}}
-          command:
-            - /bin/sh
-            - -c
+          command: 
+            - cloudflared
           {{- end }}
           {{- if .Values.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
-          {{- else if not .Values.command }}
-            args:
-              - |-
-                while true; do
-                  cloudflared tunnel --management-diagnostics --config /etc/cloudflared/config/config.yaml --origincert=/etc/cloudflared/config/cert.pem run
-                  sleep 2
-                done
-          {{- else }}
+          {{- else}}
             - tunnel
-            - --management-diagnostics
+            - --management-diagnostics 
+            - --metrics 
+            - 0.0.0.0:2000
             - --config
             - /etc/cloudflared/config/config.yaml
             - --origincert=/etc/cloudflared/config/cert.pem
