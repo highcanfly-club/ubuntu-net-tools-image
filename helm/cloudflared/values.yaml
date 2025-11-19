@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: highcanfly/net-tools
-  pullPolicy: IfNotPresent
+  pullPolicy: Always # Always, IfNotPresent, Never use Always with tags like "latest"
   # Overrides the image tag whose default is the chart appVersion.
   tag: latest
 
@@ -28,11 +28,11 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
-resources: 
+resources:
   limits:
     cpu: 400m
     memory: 256Mi
-  requests: 
+  requests:
     cpu: 10m
     memory: 32Mi
 
@@ -77,7 +77,7 @@ config: |
       service: http://minio-console:9001
     # This rule matches any traffic which didn't match a previous rule, and responds with HTTP 404.
     - service: http_status:404
-credentials: {"AccountTag": "none", "TunnelSecret": "none=", "TunnelID": ""}
+credentials: { "AccountTag": "none", "TunnelSecret": "none=", "TunnelID": "" }
 cert: |
   -----BEGIN RSA PRIVATE KEY-----
   MIIEowIBAAKCAQEAxzn6+pxqk8DsbmXQqEenyiqvgpx9giy5et3hXbolI1ubgSWM
