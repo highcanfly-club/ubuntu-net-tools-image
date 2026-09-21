@@ -11,6 +11,7 @@ This is a very basic container with some tools useful for debugging kubernetes n
 - tcpdump
 - cloudflared
 - minio mc
+- tailscale
 
 ## Docker
 

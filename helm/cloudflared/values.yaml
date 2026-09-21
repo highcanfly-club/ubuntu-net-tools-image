@@ -8,7 +8,7 @@ image:
   repository: highcanfly/net-tools
   pullPolicy: Always # Always, IfNotPresent, Never use Always with tags like "latest"
   # Overrides the image tag whose default is the chart appVersion.
-  tag: latest
+  tag: 1.6.0
 
 imagePullSecrets: []
 nameOverride: ""
@@ -42,6 +42,10 @@ autoscaling:
   maxReplicas: 100
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
+
+livenessProbe:
+  enabled: true
+  # httpGet path/port are hardcoded in the template; adjust there if needed
 
 # Additional volumes on the output Deployment definition.
 extraVolumes: []
@@ -137,3 +141,10 @@ cert: |
 
 # command: ["/usr/bin/sleep"]
 # args: ["infinity"]
+
+tailnet:
+  enabled: false
+  loginServer: "https://login.tailscale.com"
+  authKey: ""
+  hostName: ""
+  state: "tailnet.state"
