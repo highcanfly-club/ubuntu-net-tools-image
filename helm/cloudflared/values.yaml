@@ -148,3 +148,13 @@ tailnet:
   authKey: ""
   hostName: ""
   state: "tailnet.state"
+  # CIDRs to advertise as routes on the tailnet, so tailnet clients can reach
+  # other hosts in the cluster (e.g. other pods' IPs) through this node acting
+  # as a subnet router. Leave empty to disable (default). Each advertised
+  # route still needs to be approved on the control server (Headscale/Tailscale
+  # ACLs autoApprovers, or `headscale routes enable`).
+  # Enabling this switches tailscaled from userspace-networking to a real tun
+  # device and requires NET_ADMIN/NET_RAW + /dev/net/tun + an IP-forwarding
+  # init container (see deployment-cloudflared.yaml).
+  advertiseRoutes: []
+  # - 10.244.5.0/24

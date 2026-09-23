@@ -9,7 +9,7 @@ autostart = true
 restart = "always"
 
 [program.tailscaled]
-command = 'bash -c "mkdir -p /tmp/tailscaled && /usr/sbin/tailscaled --statedir=/tmp/tailscaled --state=/var/lib/tailscale/${TAILNET_STATE:-tailscale.state} --socket=/run/tailscale/tailscaled.sock --port=41641 --encrypt-state=false -tun userspace-networking"'
+command = 'bash -c "mkdir -p /tmp/tailscaled && /usr/sbin/tailscaled --statedir=/tmp/tailscaled --state=/var/lib/tailscale/${TAILNET_STATE:-tailscale.state} --socket=/run/tailscale/tailscaled.sock --port=41641 --encrypt-state=false -tun ${TAILNET_TUN_MODE:-userspace-networking}"'
 autostart = true 
 restart = "always"
 DEBUG = "true"

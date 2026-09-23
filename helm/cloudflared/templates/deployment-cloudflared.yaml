@@ -27,10 +27,26 @@ spec:
       {{- end }}
       securityContext:
         {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if and .Values.tailnet.enabled .Values.tailnet.advertiseRoutes }}
+      initContainers:
+        - name: enable-ip-forward
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          securityContext:
+            privileged: true
+          command:
+            - sh
+            - -c
+            - sysctl -w net.ipv4.ip_forward=1 && sysctl -w net.ipv6.conf.all.forwarding=1
+      {{- end }}
       containers:
         - name: {{ printf "%s-%s" .Chart.Name "cloudflared"}}
           securityContext:
+            {{- if and .Values.tailnet.enabled .Values.tailnet.advertiseRoutes }}
+            {{- toYaml (merge .Values.securityContext (dict "capabilities" (dict "add" (list "NET_ADMIN" "NET_RAW")))) | nindent 12 }}
+            {{- else }}
             {{- toYaml .Values.securityContext | nindent 12 }}
+            {{- end }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           {{- if .Values.command }}
@@ -52,7 +68,11 @@ spec:
               until [ -S /run/tailscale/tailscaled.sock ]; do
                 sleep 1
               done
+              {{- if .Values.tailnet.advertiseRoutes }}
+              tailscale --socket=/run/tailscale/tailscaled.sock up --login-server="$TAILNET_LOGIN_SERVER" --auth-key="$TAILNET_AUTH_KEY" --hostname="$TAILNET_HOSTNAME" --advertise-routes="$TAILNET_ADVERTISE_ROUTES"
+              {{- else }}
               tailscale --socket=/run/tailscale/tailscaled.sock up --login-server="$TAILNET_LOGIN_SERVER" --auth-key="$TAILNET_AUTH_KEY" --hostname="$TAILNET_HOSTNAME"
+              {{- end }}
               {{- end }}
               wait "$CIRON_PID"
           {{- end }}
@@ -65,6 +85,12 @@ spec:
               value: {{ .Values.tailnet.hostName }}
             - name: TAILNET_STATE
               value: {{ .Values.tailnet.state }}
+            {{- if .Values.tailnet.advertiseRoutes }}
+            - name: TAILNET_ADVERTISE_ROUTES
+              value: {{ join "," .Values.tailnet.advertiseRoutes | quote }}
+            - name: TAILNET_TUN_MODE
+              value: "tailscale0"
+            {{- end }}
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           {{- if .Values.livenessProbe.enabled }}
@@ -88,6 +114,10 @@ spec:
               mountPath: /var/lib/tailscale
               readOnly: false
             {{- end }}
+            {{- if and .Values.tailnet.enabled .Values.tailnet.advertiseRoutes }}
+            - name: dev-net-tun
+              mountPath: /dev/net/tun
+            {{- end }}
             {{- if .Values.extraVolumeMounts }}
             {{- toYaml .Values.extraVolumeMounts | nindent 12 }}
             {{- end }}
@@ -106,6 +136,12 @@ spec:
         {{- if .Values.tailnet.enabled }}
         - name: tailnet-state
           emptyDir: {}
+        {{- end }}
+        {{- if and .Values.tailnet.enabled .Values.tailnet.advertiseRoutes }}
+        - name: dev-net-tun
+          hostPath:
+            path: /dev/net/tun
+            type: CharDevice
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- toYaml .Values.extraVolumes | nindent 8 }}
