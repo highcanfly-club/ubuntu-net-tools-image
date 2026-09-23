@@ -158,3 +158,11 @@ tailnet:
   # init container (see deployment-cloudflared.yaml).
   advertiseRoutes: []
   # - 10.244.5.0/24
+  # Kubernetes-injected "<SERVICE>_SERVICE_HOST" env var names (NOT the IPs
+  # themselves) whose resolved ClusterIP should each be advertised as a /32
+  # route. Kubelet only injects these for Services that already exist in the
+  # same namespace when this pod starts. Also triggers the subnet-router
+  # setup above, even if advertiseRoutes is empty.
+  advertiseServiceHosts: []
+  # - CLAW_SCTG_CLAW_SERVICE_HOST
+  # - 10.244.5.0/24
