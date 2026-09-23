@@ -7,9 +7,11 @@ enable_unix = true
 command = "/usr/local/bin/cloudflared tunnel --management-diagnostics --metrics 0.0.0.0:2000 --config /etc/cloudflared/config/config.yaml --origincert=/etc/cloudflared/config/cert.pem run"
 autostart = true
 restart = "always"
+log_forward = true
 
 [program.tailscaled]
 command = 'bash -c "mkdir -p /tmp/tailscaled && /usr/sbin/tailscaled --statedir=/tmp/tailscaled --state=/var/lib/tailscale/${TAILNET_STATE:-tailscale.state} --socket=/run/tailscale/tailscaled.sock --port=41641 --encrypt-state=false -tun ${TAILNET_TUN_MODE:-userspace-networking}"'
-autostart = true 
+autostart = true
 restart = "always"
+log_forward = true
 DEBUG = "true"

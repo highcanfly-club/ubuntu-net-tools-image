@@ -1,7 +1,7 @@
 FROM ubuntu:resolute AS ciron_builder
 RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && apt-get install -y --no-install-recommends curl ca-certificates build-essential git curl pkg-config libssl-dev protobuf-compiler && apt-get clean
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
-RUN cd / && git clone https://github.com/Zaptoss/ciron.git && . ~/.cargo/env && cd ciron && cargo build --release
+RUN cd / && git clone --branch k8s https://github.com/sctg-development/ciron.git && . ~/.cargo/env && cd ciron && cargo build --release
 
 FROM cloudflare/cloudflared AS cloudflared
 
