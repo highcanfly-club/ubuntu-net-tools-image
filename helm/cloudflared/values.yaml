@@ -8,7 +8,7 @@ image:
   repository: highcanfly/net-tools
   pullPolicy: Always # Always, IfNotPresent, Never use Always with tags like "latest"
   # Overrides the image tag whose default is the chart appVersion.
-  tag: 1.6.0
+  tag: 1.6.3
 
 imagePullSecrets: []
 nameOverride: ""
