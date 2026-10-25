@@ -3,7 +3,7 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update -y && apt-get install -y --no-
 RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
 RUN cd / && git clone --branch k8s https://github.com/sctg-development/ciron.git && . ~/.cargo/env && cd ciron && cargo build --release
 
-FROM cloudflare/cloudflared AS cloudflared
+FROM cloudflare/cloudflared:latest AS cloudflared
 
 FROM ubuntu:resolute
 RUN apt update && apt install -y iputils-ping netcat-traditional bind9-dnsutils inetutils-traceroute net-tools curl tcpdump ca-certificates && apt-get clean
